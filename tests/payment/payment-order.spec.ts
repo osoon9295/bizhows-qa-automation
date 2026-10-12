@@ -34,54 +34,45 @@ test("장바구니페이지의 상품 데이터와 주문페이지의 상품 데
     has: page.getByRole("checkbox", { checked: true }),
   });
 
-  const firstCartProduct = selectedCartItems.nth(0);
-  const secondCartProduct = selectedCartItems.nth(1);
-
   // 장바구니 - 상품 아이템 개수
   const selectedCartItemCount = await selectedCartItems.count();
 
   expect(selectedCartItemCount).toBe(2);
 
+  // 장바구니 - 상품 데이터 저장
+  const cartItems: {
+    name: string;
+    options: Record<string, string>;
+    quantity: number | null;
+  }[] = [];
+
+  for (let i = 0; i < selectedCartItemCount; i++) {
+    const product = selectedCartItems.nth(i);
+
+    // 상품명
+    const name = await product.locator('a[href^="/ko/v/option?"]').innerText();
+
+    // 옵션
+    const OptionsText = await product.locator("ul").first().innerText();
+    const options = parseOptions(OptionsText.split("|"));
+
+    // 수량
+    const quantity = await getCartQuantity(product);
+
+    cartItems.push({ name, options, quantity });
+  }
+
   await expect(
     page.locator("label").filter({ hasText: /^(\d+개 선택)$/ }),
   ).toHaveText(`${selectedCartItemCount}개 선택`);
 
-  await expect(
-    page.getByRole("button", {
+  // When
+  await page
+    .getByRole("button", {
       name: `총 ${selectedCartItemCount}개 주문하기`,
       exact: true,
-    }),
-  ).toBeVisible();
-
-  // 장바구니 - 상품 아이템 이름
-  const firstCartProductName = await firstCartProduct
-    .locator('a[href^="/ko/v/option?"]')
-    .innerText();
-  const secondCartProductName = await secondCartProduct
-    .locator('a[href^="/ko/v/option?"]')
-    .innerText();
-
-  // 장바구니 - 상품 아이템 옵션
-  const firstCartProductOptionsText = await firstCartProduct
-    .locator("ul")
-    .first()
-    .innerText();
-
-  const secondCartProductOptionsText = await secondCartProduct
-    .locator("ul")
-    .first()
-    .innerText();
-
-  const firstCartOptions = parseOptions(firstCartProductOptionsText.split("|"));
-  const secondCartOptions = parseOptions(
-    secondCartProductOptionsText.split("|"),
-  );
-
-  const firstCartQuantity = await getCartQuantity(firstCartProduct);
-  const secondCartQuantity = await getCartQuantity(secondCartProduct);
-
-  // When
-  await page.getByRole("button", { name: "총 2개 주문하기" }).click();
+    })
+    .click();
 
   // Then
   await expect(page).toHaveURL("https://www.bizhows.com/ko/v/step4-address");
@@ -91,71 +82,34 @@ test("장바구니페이지의 상품 데이터와 주문페이지의 상품 데
     page.getByRole("heading", { name: /^주문상품 \(\d+\)$/, exact: true }),
   ).toHaveText(`주문상품 (${selectedCartItemCount})`);
 
-  // 2. 주문상품명은 장바구니에서 선택한 상품명과 각각 일치한다.
-  await expect(
-    page.getByRole("heading", {
-      name: firstCartProductName,
+  // 2. 주문내용(제품명, 옵션, 수량)이 선택한 내용과 일치한다.
+  for (const cartItem of cartItems) {
+    const orderProductName = page.getByRole("heading", {
+      name: cartItem.name,
       level: 3,
       exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", {
-      name: secondCartProductName,
-      level: 3,
-      exact: true,
-    }),
-  ).toBeVisible();
+    });
 
-  // 3. 주문상품 옵션은 장바구니에서 선택한 상품 옵션과 각각 일치한다.
-  const firstOrderProduct = page
-    .getByRole("heading", {
-      name: firstCartProductName,
-      level: 3,
-      exact: true,
-    })
-    .locator("xpath=ancestor::li[1]");
+    await expect(orderProductName).toBeVisible();
 
-  const secondOrderProduct = page
-    .getByRole("heading", {
-      name: secondCartProductName,
-      level: 3,
-      exact: true,
-    })
-    .locator("xpath=ancestor::li[1]");
+    const orderProduct = orderProductName.locator("xpath=ancestor::li[1]");
 
-  const firstOrderOptionTexts = await firstOrderProduct
-    .locator("ul>li")
-    .allInnerTexts();
+    const orderOptionTexts = await orderProduct
+      .locator("ul>li")
+      .allInnerTexts();
 
-  const secondOrderOptionTexts = await secondOrderProduct
-    .locator("ul>li")
-    .allInnerTexts();
+    const orderOptions = parseOptions(orderOptionTexts);
 
-  const firstOrderOptions = parseOptions(firstOrderOptionTexts);
-  const secondOrderOptions = parseOptions(secondOrderOptionTexts);
+    const { "수량(건)": orderQuantity, ...orderRestOptions } = orderOptions;
 
-  const { "수량(건)": firstOrderQuantity, ...firstOrderRest } =
-    firstOrderOptions;
-  const { "수량(건)": secondOrderQuantity, ...secondOrderRest } =
-    secondOrderOptions;
+    expect(orderRestOptions).toEqual(cartItem.options);
 
-  expect(firstCartOptions).toEqual(firstOrderRest);
-  expect(secondCartOptions).toEqual(secondOrderRest);
-
-  if (firstCartQuantity !== null) {
-    expect(Number(firstOrderQuantity)).toBe(firstCartQuantity);
-  } else {
-    expect(Number(firstOrderQuantity)).toBe(1);
+    if (cartItem.quantity !== null) {
+      expect(Number(orderQuantity)).toBe(cartItem.quantity);
+    } else {
+      expect(Number(orderQuantity)).toBe(1);
+    }
   }
 
-  if (secondCartQuantity !== null) {
-    expect(Number(secondOrderQuantity)).toBe(secondCartQuantity);
-  } else {
-    expect(Number(secondOrderQuantity)).toBe(1);
-  }
-
-  // 4. 주문상품별 금액은 장바구니에서 선택한 상품별 금액과 각각 일치한다.
-
-  // 5. 최종 결제금액은 장바구니에서 계산된 주문금액과 일치한다.
+  // 3. 주문상품별 금액은 장바구니에서 선택한 상품별 금액과 각각 일치한다.
 });
