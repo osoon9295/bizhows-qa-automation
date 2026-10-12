@@ -1,14 +1,12 @@
 import { test, expect } from "@playwright/test";
-
-function parsePrice(text: string): number {
-  return Number(text.replace(/[^\d]/g, ""));
-}
+import { parsePrice } from "../../helpers/price";
+import { getCartProducts, selectCartProduct } from "../../helpers/cart";
 
 test.use({
   storageState: "playwright/.auth/user.json",
 });
 
-test("장바구니 선택 상태에 따른 주문금액 검증", async ({ page }) => {
+test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async ({ page }) => {
   // Given
   await page.addLocatorHandler(
     page.getByRole("button", {
@@ -30,9 +28,9 @@ test("장바구니 선택 상태에 따른 주문금액 검증", async ({ page }
     .locator("header label")
     .filter({ hasText: /^전체 선택$/ });
 
-  const productItems = page.locator("div[data-comm-idx]");
-  const firstProduct = productItems.nth(0);
-  const secondProduct = productItems.nth(1);
+  const products = getCartProducts(page);
+  const firstProduct = products.nth(0);
+  const secondProduct = products.nth(1);
 
   const firstOriginalPrice = parsePrice(
     (await firstProduct.locator("s").textContent())!,
@@ -105,16 +103,7 @@ test("장바구니 선택 상태에 따른 주문금액 검증", async ({ page }
 
   await test.step("선택 상품 1개", async () => {
     // When
-    await expect(productItems).toHaveCount(2);
-
-    const firstCheckboxLabel = firstProduct.locator("label");
-    const firstCheckbox = firstCheckboxLabel.getByRole("checkbox");
-
-    await expect(firstCheckbox).not.toBeChecked();
-
-    await firstCheckboxLabel.click();
-
-    await expect(firstCheckbox).toBeChecked();
+    await selectCartProduct(page, 0);
 
     // Then
     await expect(orderAmount).toHaveText(
@@ -140,14 +129,7 @@ test("장바구니 선택 상태에 따른 주문금액 검증", async ({ page }
 
   await test.step("선택 상품 2개", async () => {
     // When
-    const secondCheckboxLabel = secondProduct.locator("label");
-    const secondCheckbox = secondCheckboxLabel.getByRole("checkbox");
-
-    await expect(secondCheckbox).not.toBeChecked();
-
-    await secondCheckboxLabel.click();
-
-    await expect(secondCheckbox).toBeChecked();
+    await selectCartProduct(page, 1);
 
     //Then
 
