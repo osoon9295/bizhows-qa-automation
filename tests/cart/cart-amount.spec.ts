@@ -48,30 +48,30 @@ test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async
     (await secondProduct.locator("small + div > span").textContent())!,
   );
 
-  const orderAmount = page
+  const cartOrderAmountLocator = page
     .locator("span")
     .filter({ hasText: /^주문 금액$/ })
     .locator("+ span");
 
-  const discountAmount = page
+  const cartProductDiscountAmountLocator = page
     .locator("span")
     .filter({ hasText: /^상품 할인 금액$/ })
     .locator("+ span");
 
-  const deliveryChargeLabel = page
+  const cartShippingFeeLabel = page
     .locator("span")
     .filter({ hasText: /^배송비\s*$/ });
 
-  const deliveryCharge = deliveryChargeLabel
+  const cartShippingFeeLocator = cartShippingFeeLabel
     .locator("+ span")
     .or(
       page
         .locator("summary")
-        .filter({ has: deliveryChargeLabel })
+        .filter({ has: cartShippingFeeLabel })
         .locator(":scope > span"),
     );
 
-  const sum = page
+  const cartTotalAmountLocator = page
     .locator("span")
     .filter({ hasText: /^총 금액$/ })
     .locator("+ span");
@@ -89,10 +89,10 @@ test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async
     await expect(unSelectAllCheckbox).not.toBeChecked();
 
     // Then
-    await expect(orderAmount).toHaveText("0원");
-    await expect(discountAmount).toHaveText("- 0원");
-    await expect(deliveryCharge).toHaveText("0원");
-    await expect(sum).toHaveText("0원");
+    await expect(cartOrderAmountLocator).toHaveText("0원");
+    await expect(cartProductDiscountAmountLocator).toHaveText("- 0원");
+    await expect(cartShippingFeeLocator).toHaveText("0원");
+    await expect(cartTotalAmountLocator).toHaveText("0원");
 
     await expect(
       page
@@ -106,23 +106,23 @@ test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async
     await selectCartProduct(page, 0);
 
     // Then
-    await expect(orderAmount).toHaveText(
+    await expect(cartOrderAmountLocator).toHaveText(
       `${firstOriginalPrice.toLocaleString("ko-KR")}원`,
     );
 
     const expectedDiscount = firstOriginalPrice - firstDiscountedPrice;
 
-    await expect(discountAmount).toHaveText(
+    await expect(cartProductDiscountAmountLocator).toHaveText(
       `- ${expectedDiscount.toLocaleString("ko-KR")}원`,
     );
 
     const deliveryChargeValue = parsePrice(
-      (await deliveryCharge.textContent())!,
+      (await cartShippingFeeLocator.textContent())!,
     );
 
-    await expect(deliveryCharge).toHaveCount(1);
+    await expect(cartShippingFeeLocator).toHaveCount(1);
 
-    await expect(sum).toHaveText(
+    await expect(cartTotalAmountLocator).toHaveText(
       `${(firstOriginalPrice - expectedDiscount + deliveryChargeValue).toLocaleString("ko-KR")}원`,
     );
   });
@@ -135,7 +135,7 @@ test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async
 
     const expectedAmount = firstOriginalPrice + secondOriginalPrice;
 
-    await expect(orderAmount).toHaveText(
+    await expect(cartOrderAmountLocator).toHaveText(
       `${expectedAmount.toLocaleString("ko-KR")}원`,
     );
 
@@ -144,15 +144,15 @@ test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async
       secondOriginalPrice -
       (firstDiscountedPrice + secondDiscountedPrice);
 
-    await expect(discountAmount).toHaveText(
+    await expect(cartProductDiscountAmountLocator).toHaveText(
       `- ${expectedDiscount.toLocaleString("ko-KR")}원`,
     );
 
     const deliveryChargeValue = parsePrice(
-      (await deliveryCharge.textContent())!,
+      (await cartShippingFeeLocator.textContent())!,
     );
 
-    await expect(sum).toHaveText(
+    await expect(cartTotalAmountLocator).toHaveText(
       `${(expectedAmount - expectedDiscount + deliveryChargeValue).toLocaleString("ko-KR")}원`,
     );
   });
