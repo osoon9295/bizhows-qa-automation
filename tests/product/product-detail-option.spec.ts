@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("페이지 첫 진입시 기본 옵션이 표시된다.", async ({ page }) => {
+test("상품 상세 페이지 첫 진입 시 기본 옵션이 표시된다.", async ({ page }) => {
   // Given
   await page.goto(
     "https://www.bizhows.com/ko/v/option?code1=9000&code2=200&code3=9101&mock=9000_200_9101&from=megamenu_search",
@@ -74,7 +74,7 @@ const cases = [
 ];
 
 for (const testCase of cases) {
-  test(`${testCase.size} 수량 옵션을 확인한다.`, async ({ page }) => {
+  test(`${testCase.size} 선택 시 수량 옵션이 표시된다.`, async ({ page }) => {
     // Given
     await page.goto(
       "https://www.bizhows.com/ko/v/option?code1=9000&code2=200&code3=9101&mock=9000_200_9101&from=megamenu_search",
@@ -127,7 +127,7 @@ for (const testCase of cases) {
 }
 
 for (const testCase of cases) {
-  test(`${testCase.size} 뚜껑 옵션을 확인한다.`, async ({ page }) => {
+  test(`${testCase.size} 선택 시 뚜껑 옵션이 표시된다.`, async ({ page }) => {
     // Given
     await page.goto(
       "https://www.bizhows.com/ko/v/option?code1=9000&code2=200&code3=9101&mock=9000_200_9101&from=megamenu_search",
@@ -179,7 +179,7 @@ for (const testCase of cases) {
   });
 }
 
-test("사이즈 변경시 선택값이 유효하면 유지되고, 유효하지 않으면 기본값으로 초기화된다.", async ({
+test("사이즈 변경 시 유효한 옵션은 유지되고, 유효하지 않은 옵션은 기본값으로 초기화된다.", async ({
   page,
 }) => {
   // Given 1 : 비즈하우스 상품 인쇄종이컵 상세 페이지에 접속해 있다.

@@ -11,7 +11,7 @@ test.use({
   storageState: "playwright/.auth/user.json",
 });
 
-test("장바구니 선택 상태에 따른 주문금액을 검증한다.", async ({ page }) => {
+test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.", async ({ page }) => {
   // Given
   await page.addLocatorHandler(
     page.getByRole("button", {

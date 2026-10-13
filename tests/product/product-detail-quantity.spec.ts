@@ -20,7 +20,7 @@ const cases = [
 for (const testCase of cases) {
   const plusState = testCase.plusEnabled ? "활성화" : "비활성화";
   const minusState = testCase.minusEnabled ? "활성화" : "비활성화";
-  test(`수량 ${testCase.quantity}을 입력하면 ${testCase.expectedValue}이 입력되고 -버튼은 ${minusState}, +버튼은 ${plusState} 상태가 된다.`, async ({
+  test(`수량 ${testCase.quantity} 입력 시 ${testCase.expectedValue}로 보정되고, - 버튼은 ${minusState}, + 버튼은 ${plusState} 상태가 된다.`, async ({
     page,
   }) => {
     // Given
@@ -56,7 +56,7 @@ for (const testCase of cases) {
   });
 }
 
-test("상품 수량 증감 버튼 기능 확인", async ({ page }) => {
+test("상품 수량 증감 버튼으로 수량을 변경할 수 있다.", async ({ page }) => {
   // Given
   await page.goto(
     "https://www.bizhows.com/ko/v/option?code1=7700&code2=200&code3=7346&mock=7700_200_7346_2&from=search&fromSearchKeyword=%EB%AC%B4%EA%B4%91+%EC%8A%A4%ED%85%90+%ED%85%80%EB%B8%94%EB%9F%AC&selectedOptionList=33301085%2C33301112%2C33301111%2C33301110%2C33301108%2C33301107%2C33301101%2C33301099%2C33301603%2C33301106",

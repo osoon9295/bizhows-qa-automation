@@ -12,7 +12,7 @@ test.use({
   storageState: "playwright/.auth/user.json",
 });
 
-test("장바구니페이지의 상품 데이터와 주문페이지의 상품 데이터가 일치한다.", async ({
+test("장바구니와 주문 페이지의 상품 데이터가 일치한다.", async ({
   page,
 }) => {
   // Given

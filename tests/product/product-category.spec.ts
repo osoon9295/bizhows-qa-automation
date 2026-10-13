@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("상품 제작 전체보기 메뉴를 호버하면 카테고리 메가 메뉴가 노출된다.", async ({
+test("상품 제작 전체보기 메뉴를 호버하면 카테고리 메가 메뉴가 표시된다.", async ({
   page,
 }) => {
   // Given
@@ -15,7 +15,7 @@ test("상품 제작 전체보기 메뉴를 호버하면 카테고리 메가 메�
   ).toBeVisible();
 });
 
-test("카테고리 그룹 선택 시 해당 카테고리의 상품 목록 페이지가 표시된다.", async ({
+test("카테고리 그룹을 선택하면 상품 목록 페이지가 표시된다.", async ({
   page,
 }) => {
   // Given
@@ -34,7 +34,7 @@ test("카테고리 그룹 선택 시 해당 카테고리의 상품 목록 페이
   await expect(productCards.first()).toBeVisible();
 });
 
-test("카테고리 그룹 하위 상품 선택 시 해당 상품의 상세 페이지가 표시된다.", async ({
+test("카테고리 하위 상품을 선택하면 상품 상세 페이지가 표시된다.", async ({
   page,
 }) => {
   // Given

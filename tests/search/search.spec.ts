@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("상품 검색 시 검색 결과가 노출된다. - 검색아이콘 클릭", async ({
+test("검색 아이콘으로 검색하면 검색 결과가 표시된다.", async ({
   page,
 }) => {
   const keyword = "다이어리";
@@ -26,7 +26,7 @@ test("상품 검색 시 검색 결과가 노출된다. - 검색아이콘 클릭"
   );
 });
 
-test("상품 검색 시 검색 결과가 노출된다. - Enter", async ({ page }) => {
+test("Enter 키로 검색하면 검색 결과가 표시된다.", async ({ page }) => {
   const keyword = "다이어리";
 
   // Given
@@ -47,7 +47,7 @@ test("상품 검색 시 검색 결과가 노출된다. - Enter", async ({ page }
   );
 });
 
-test("결과 없는 검색어를 검색 할 때 검색된 상품 0개가 노출된다.", async ({
+test("검색 결과가 없는 검색어를 검색하면 상품 0개가 표시된다.", async ({
   page,
 }) => {
   const keyword = "bizhows_qa_no_result_260928_x9q7";
