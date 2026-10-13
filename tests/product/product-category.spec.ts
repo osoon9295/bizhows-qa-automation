@@ -41,8 +41,6 @@ test("카테고리 그룹 하위 상품 선택 시 해당 상품의 상세 페�
   await page.goto("https://www.bizhows.com/ko");
   await page.getByText("상품 제작 전체보기").hover();
 
-  await page.pause();
-
   // When
   await page.getByRole("link", { name: "2단 청첩장", exact: true }).click();
 
