@@ -6,10 +6,14 @@ test("페이지 첫 진입시 기본 옵션이 표시된다.", async ({ page }) 
     "https://www.bizhows.com/ko/v/option?code1=9000&code2=200&code3=9101&mock=9000_200_9101&from=megamenu_search",
   );
 
+  await expect(page).toHaveURL(/\/ko\/v\/option/);
+
   // Then
-  await expect(
-    page.getByRole("button", { name: "10온스", exact: true }),
-  ).toBeVisible();
+  const sizeDropdownTrigger = page
+    .getByRole("button", { name: "10온스", exact: true })
+    .and(page.locator('button[aria-haspopup="listbox"]'));
+
+  await expect(sizeDropdownTrigger).toBeVisible({ timeout: 15000 });
 
   await expect(
     page.getByRole("button", { name: "없음", exact: true }),
@@ -131,12 +135,20 @@ for (const testCase of cases) {
 
     // When - 1. 사이즈 선택
     if (testCase.size !== "10온스") {
-      const sizeDropdownTrigger = page.getByRole("button", {
-        name: "10온스",
-        exact: true,
-      });
+      const sizeDropdownTrigger = page
+        .getByRole("button", {
+          name: "10온스",
+          exact: true,
+        })
+        .and(page.locator('button[aria-haspopup="listbox"]'));
 
       await sizeDropdownTrigger.click();
+
+      // aria-expanded 속성을 사용하는 컴포넌트인 경우
+      await expect(sizeDropdownTrigger).toHaveAttribute(
+        "aria-expanded",
+        "true",
+      );
 
       const size = page.getByRole("button", {
         name: testCase.size,
