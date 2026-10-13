@@ -12,7 +12,7 @@ test.use({
 });
 
 test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.", async ({ page }) => {
-  // Given
+  // Given: 장바구니에 상품 2개가 있고 전체 선택 상태인 페이지에 진입한다.
   await page.addLocatorHandler(
     page.getByRole("button", {
       name: "괜찮아요",
@@ -51,18 +51,18 @@ test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.
   } = getCartAmountLocators(page);
 
   await test.step("선택 상품 0개", async () => {
-    // Given
+    // Given: 장바구니의 모든 상품이 선택된 상태이다.
     const selectAllCheckbox = selectedLabel.getByRole("checkbox");
     const unSelectAllCheckbox = unSelectedLabel.getByRole("checkbox");
 
     await expect(selectAllCheckbox).toBeChecked();
 
-    // When
+    // When: 전체 선택을 해제한다.
     await selectedLabel.click();
 
     await expect(unSelectAllCheckbox).not.toBeChecked();
 
-    // Then
+    // Then: 선택 상품이 없고 주문 금액과 주문하기 버튼이 비활성 상태이다.
     await expect(cartOrderAmountLocator).toHaveText("0원");
     await expect(cartProductDiscountAmountLocator).toHaveText("- 0원");
     await expect(cartShippingFeeLocator).toHaveText("0원");
@@ -76,10 +76,12 @@ test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.
   });
 
   await test.step("선택 상품 1개", async () => {
-    // When
+    // Given: 장바구니 상품 0개가 선택된 상태이다.
+
+    // When: 첫 번째 상품을 선택한다.
     await selectCartProduct(page, 0);
 
-    // Then
+    // Then: 첫 번째 상품의 주문 금액과 할인 금액, 총 금액이 계산된다.
     await expect(cartOrderAmountLocator).toHaveText(
       `${firstProductPrices.originalPrice.toLocaleString("ko-KR")}원`,
     );
@@ -103,10 +105,12 @@ test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.
   });
 
   await test.step("선택 상품 2개", async () => {
-    // When
+    // Given: 장바구니 상품 1개가 선택된 상태이다.
+
+    // When: 두 번째 상품을 선택한다.
     await selectCartProduct(page, 1);
 
-    //Then
+    // Then: 두 상품의 주문 금액과 할인 금액, 총 금액이 합산된다.
 
     const expectedAmount =
       firstProductPrices.originalPrice + secondProductPrices.originalPrice;
