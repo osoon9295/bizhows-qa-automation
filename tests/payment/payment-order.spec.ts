@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import {
+  getCartAmountLocators,
   getCartProducts,
   getCartQuantity,
   selectTwoCartProducts,
@@ -80,41 +81,20 @@ test("장바구니페이지의 상품 데이터와 주문페이지의 상품 데
   ).toHaveText(`${selectedCartItemCount}개 선택`);
 
   // 장바구니 - 결제 금액
-  const cartOrderAmountLocator = page
-    .locator("span")
-    .filter({ hasText: /^주문 금액$/ })
-    .locator("+ span");
+  const {
+    orderAmount: cartOrderAmountLocator,
+    productDiscountAmount: cartProductDiscountAmountLocator,
+    shippingFee: cartShippingFeeLocator,
+    totalAmount: cartTotalAmountLocator,
+  } = getCartAmountLocators(page);
 
   const cartOrderAmount = parsePrice(await cartOrderAmountLocator.innerText());
-
-  const cartProductDiscountAmountLocator = page
-    .locator("span")
-    .filter({ hasText: /^상품 할인 금액$/ })
-    .locator("+ span");
 
   const cartProductDiscountAmount = parsePrice(
     await cartProductDiscountAmountLocator.innerText(),
   );
 
-  const cartShippingFeeLabel = page
-    .locator("span")
-    .filter({ hasText: /^배송비\s*$/ });
-
-  const cartShippingFeeLocator = cartShippingFeeLabel
-    .locator("+ span")
-    .or(
-      page
-        .locator("summary")
-        .filter({ has: cartShippingFeeLabel })
-        .locator(":scope > span"),
-    );
-
   const cartShippingFee = parsePrice(await cartShippingFeeLocator.innerText());
-
-  const cartTotalAmountLocator = page
-    .locator("span")
-    .filter({ hasText: /^총 금액$/ })
-    .locator("+ span");
 
   const cartTotalAmount = parsePrice(await cartTotalAmountLocator.innerText());
 

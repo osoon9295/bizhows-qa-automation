@@ -4,6 +4,35 @@ export function getCartProducts(page: Page) {
   return page.locator("div[data-comm-idx]");
 }
 
+export function getCartAmountLocators(page: Page) {
+  const cartShippingFeeLabel = page
+    .locator("span")
+    .filter({ hasText: /^배송비\s*$/ });
+
+  return {
+    orderAmount: page
+      .locator("span")
+      .filter({ hasText: /^주문 금액$/ })
+      .locator("+ span"),
+    productDiscountAmount: page
+      .locator("span")
+      .filter({ hasText: /^상품 할인 금액$/ })
+      .locator("+ span"),
+    shippingFee: cartShippingFeeLabel
+      .locator("+ span")
+      .or(
+        page
+          .locator("summary")
+          .filter({ has: cartShippingFeeLabel })
+          .locator(":scope > span"),
+      ),
+    totalAmount: page
+      .locator("span")
+      .filter({ hasText: /^총 금액$/ })
+      .locator("+ span"),
+  };
+}
+
 export async function selectCartProduct(page: Page, index: number) {
   const products = getCartProducts(page);
   const product = products.nth(index);
