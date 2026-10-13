@@ -1,4 +1,5 @@
 import { expect, type Page, type Locator } from "@playwright/test";
+import { parsePrice } from "./price";
 
 export function getCartProducts(page: Page) {
   return page.locator("div[data-comm-idx]");
@@ -31,6 +32,18 @@ export function getCartAmountLocators(page: Page) {
       .filter({ hasText: /^총 금액$/ })
       .locator("+ span"),
   };
+}
+
+export async function getCartProductPrices(product: Locator) {
+  const originalPrice = parsePrice(
+    (await product.locator("s").textContent())!,
+  );
+
+  const discountedPrice = parsePrice(
+    (await product.locator("small + div > span").textContent())!,
+  );
+
+  return { originalPrice, discountedPrice };
 }
 
 export async function selectCartProduct(page: Page, index: number) {
