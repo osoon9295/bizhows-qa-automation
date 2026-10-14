@@ -72,18 +72,18 @@ test("상품 수량 증감 버튼으로 수량을 변경할 수 있다.", async 
   const plusButton = quantityControl.getByRole("button").last();
 
   await test.step("+버튼을 누르면 수량이 1 증가한다.", async () => {
-    // When: + 버튼을 클릭한다.
+    // When 1 : + 버튼을 클릭한다.
     await plusButton.click();
 
-    // Then: 수량이 2로 증가한다.
+    // Then 1 : 수량이 2로 증가한다.
     await expect(quantityInput).toHaveValue("2");
   });
 
   await test.step("-버튼을 누르면 수량이 1 감소한다.", async () => {
-    // When: - 버튼을 클릭한다.
+    // When 2 : - 버튼을 클릭한다.
     await minusButton.click();
 
-    // Then: 수량이 1로 감소한다.
+    // Then 2 : 수량이 1로 감소한다.
     await expect(quantityInput).toHaveValue("1");
   });
 });
