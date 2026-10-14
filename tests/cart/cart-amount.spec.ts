@@ -25,11 +25,11 @@ test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.
 
   await page.goto("https://www.bizhows.com/ko/v/step3-cart");
 
-  const selectedLabel = page
+  const selectedCountLabel = page
     .locator("label")
     .filter({ hasText: /^(\d+개 선택)$/ });
 
-  const unSelectedLabel = page
+  const unselectedCountLabel = page
     .locator("header label")
     .filter({ hasText: /^전체 선택$/ });
 
@@ -52,15 +52,15 @@ test("장바구니 상품 선택 상태에 따라 주문 금액을 검증한다.
 
   await test.step("선택 상품 0개", async () => {
     // Given: 장바구니의 모든 상품이 선택된 상태이다.
-    const selectAllCheckbox = selectedLabel.getByRole("checkbox");
-    const unSelectAllCheckbox = unSelectedLabel.getByRole("checkbox");
+    const selectAllCheckbox = selectedCountLabel.getByRole("checkbox");
+    const unselectAllCheckbox = unselectedCountLabel.getByRole("checkbox");
 
     await expect(selectAllCheckbox).toBeChecked();
 
     // When: 전체 선택을 해제한다.
-    await selectedLabel.click();
+    await selectedCountLabel.click();
 
-    await expect(unSelectAllCheckbox).not.toBeChecked();
+    await expect(unselectAllCheckbox).not.toBeChecked();
 
     // Then: 선택 상품이 없고 주문 금액과 주문하기 버튼이 비활성 상태이다.
     await expect(cartOrderAmountLocator).toHaveText("0원");

@@ -53,8 +53,8 @@ test("장바구니와 주문 페이지의 상품 데이터가 일치한다.", as
 
     const name = await product.locator('a[href^="/ko/v/option?"]').innerText();
 
-    const OptionsText = await product.locator("ul").first().innerText();
-    const options = parseOptions(OptionsText.split("|"));
+    const optionsText = await product.locator("ul").first().innerText();
+    const options = parseOptions(optionsText.split("|"));
 
     const quantity = await getCartQuantity(product);
 
@@ -212,11 +212,11 @@ test("장바구니와 주문 페이지의 상품 데이터가 일치한다.", as
   );
   expect(checkoutAmounts.shippingFee).toBe(cartAmounts.shippingFee);
 
-  const expectedTotalAmound =
+  const expectedTotalAmount =
     checkoutAmounts.orderAmount -
     checkoutAmounts.productDiscountAmount +
     checkoutAmounts.shippingFee -
     checkoutAmounts.pointsUsed;
 
-  expect(expectedTotalAmound).toBe(checkoutAmounts.totalAmount);
+  expect(expectedTotalAmount).toBe(checkoutAmounts.totalAmount);
 });
