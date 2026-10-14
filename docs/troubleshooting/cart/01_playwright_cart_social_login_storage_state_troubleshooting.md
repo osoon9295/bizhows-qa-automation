@@ -81,9 +81,7 @@ test.use({ storageState: "playwright/.auth/user.json" });
 
 test("저장된 로그인 상태 확인", async ({ page }) => {
   await page.goto("https://www.bizhows.com/ko");
-  await expect(
-    page.getByRole("button", { name: /^.+님$/ }),
-  ).toBeVisible();
+  await expect(page.getByRole("button", { name: /^.+님$/ })).toBeVisible();
 });
 ```
 
@@ -102,8 +100,7 @@ playwright/.auth/
 코드 저장소에는 다음만 남긴다.
 
 ```text
-tests/cart/
-  cart-amount.spec.ts
+tests/auth/
   auth-check.spec.ts   # 진단용
 
 playwright/.auth/

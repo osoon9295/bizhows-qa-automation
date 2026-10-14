@@ -42,7 +42,7 @@
 ### 인증 상태 확인
 
 ```bash
-npx playwright test tests/cart/auth-check.spec.ts
+npx playwright test tests/auth/auth-check.spec.ts
 ```
 
 인증 상태 확인 테스트가 성공하면 저장된 로그인 상태로 장바구니 페이지에

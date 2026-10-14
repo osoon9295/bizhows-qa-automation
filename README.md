@@ -98,7 +98,7 @@ npx playwright codegen \
 저장된 인증 상태는 다음 테스트로 확인할 수 있습니다.
 
 ```bash
-npx playwright test tests/cart/auth-check.spec.ts
+npx playwright test tests/auth/auth-check.spec.ts
 ```
 
 ### 테스트 실행
@@ -165,3 +165,13 @@ npx playwright show-report
 - 장바구니와 주문 페이지 테스트는 로그인 세션과 운영 데이터에 의존합니다.
 - 장바구니 금액 테스트는 실행 전에 상품 2개를 수동으로 준비해야 합니다.
 - 공개된 UI와 실제 동작을 기준으로 기대 결과를 정의했으며, 확인할 수 없는 내부 정책은 테스트 범위에서 제외했습니다.
+
+## 실행 결과
+
+![alt text](image-9.png)
+![alt text](image-1.png)
+![alt text](image-10.png)
+![alt text](image-11.png)
+![alt text](image-12.png)
+![alt text](image-8.png)
+![alt text](image-7.png)
