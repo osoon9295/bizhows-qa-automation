@@ -14,7 +14,7 @@
 
 ## 사전 조건
 
-- Bizhows 로그인 상태가 필요하다.
+- BizHows 로그인 상태가 필요하다.
 - `playwright/.auth/user.json` 인증 상태 파일이 필요하다.
 - 테스트 실행 전에 장바구니에 상품을 정확히 2개 추가해야 한다.
 - 두 상품 모두 원가와 할인가가 화면에 표시되어야 한다.
@@ -34,7 +34,7 @@
      https://www.bizhows.com/ko
    ```
 
-2. Playwright 브라우저에서 Bizhows에 로그인한다.
+2. Playwright 브라우저에서 BizHows에 로그인한다.
 3. 장바구니에 상품 2개를 수동으로 추가한다.
 4. 로그인과 장바구니 상태가 저장된 브라우저를 종료한다.
 5. `playwright/.auth/user.json` 파일이 생성되었는지 확인한다.
