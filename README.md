@@ -2,6 +2,11 @@
 
 BizHows 웹 서비스의 핵심 구매 여정을 대상으로 테스트를 설계하고, 반복 실행과 회귀 검증에 적합한 시나리오를 Playwright로 자동화한 QA 포트폴리오 프로젝트입니다.
 
+[포트폴리오 보러가기](https://app.notion.com/p/Bizhows-QA-Portfolio-3f98106a6a62801985c3f174f6c8e4b3) <br/>
+[테스트 계획서 보러가기](https://docs.google.com/document/d/1_QCawoROeexOhoxCXGrIo32TNOQT4up4Ytn2kV5npiE/edit?tab=t.5mpze2fwz669#heading=h.f4cfkpd3xfte) <br/>
+[테스트 산출물 보러가기](https://docs.google.com/spreadsheets/d/1lWnelaJZCI39hUU3GpCJziDhLtDBmQCC2qcra7xTq_o/edit?gid=1467160641#gid=1467160641) <br/>
+[테스트 결과보고서 보러가기](https://docs.google.com/document/d/1Nz0gPmA8CLOGyogkXxIEVcwDjRV5T4rLU_0qHtr8Pq4/edit?tab=t.0#heading=h.kfe25kcnepk0) <br/>
+
 ## 프로젝트 개요
 
 | 항목        | 내용                          |
